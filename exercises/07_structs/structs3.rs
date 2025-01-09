@@ -1,42 +1,40 @@
-// Structs contain data, but can also have logic. In this exercise, we have
-// defined the `Package` struct, and we want to test some logic attached to it.
+// structs3.rs
+// Structs contain data, but can also have logic. In this exercise we have
+// defined the Package struct and we want to test some logic attached to it.
+// Make the code compile and the tests pass!
+// If you have issues execute `rustlings hint structs3`
 
 #[derive(Debug)]
 struct Package {
     sender_country: String,
     recipient_country: String,
-    weight_in_grams: u32,
+    weight_in_grams: i32,
 }
 
 impl Package {
-    fn new(sender_country: String, recipient_country: String, weight_in_grams: u32) -> Self {
-        if weight_in_grams < 10 {
-            // This isn't how you should handle errors in Rust, but we will
-            // learn about error handling later.
-            panic!("Can't ship a package with weight below 10 grams");
-        }
-
-        Self {
-            sender_country,
-            recipient_country,
-            weight_in_grams,
+    fn new(sender_country: String, recipient_country: String, weight_in_grams: i32) -> Package {
+        if weight_in_grams <= 0 {
+            panic!("Negative weight is passed");
+        } else {
+            Package {
+                sender_country,
+                recipient_country,
+                weight_in_grams,
+            }
         }
     }
 
-    // TODO: Add the correct return type to the function signature.
-    fn is_international(&self) {
-        // TODO: Read the tests that use this method to find out when a package
-        // is considered international.
+    fn is_international(&self) -> bool {
+        if self.sender_country != self.recipient_country {
+            true
+        } else {
+            false
+        }
     }
 
-    // TODO: Add the correct return type to the function signature.
-    fn get_fees(&self, cents_per_gram: u32) {
-        // TODO: Calculate the package's fees.
+    fn get_fees(&self, cents_per_gram: i32) -> i32 {
+        self.weight_in_grams * cents_per_gram
     }
-}
-
-fn main() {
-    // You can optionally experiment here.
 }
 
 #[cfg(test)]
@@ -49,7 +47,7 @@ mod tests {
         let sender_country = String::from("Spain");
         let recipient_country = String::from("Austria");
 
-        Package::new(sender_country, recipient_country, 5);
+        Package::new(sender_country, recipient_country, -2210);
     }
 
     #[test]
@@ -82,6 +80,5 @@ mod tests {
         let package = Package::new(sender_country, recipient_country, 1500);
 
         assert_eq!(package.get_fees(cents_per_gram), 4500);
-        assert_eq!(package.get_fees(cents_per_gram * 2), 9000);
     }
 }

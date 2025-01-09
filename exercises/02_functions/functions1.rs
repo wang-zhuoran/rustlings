@@ -1,5 +1,10 @@
-// TODO: Add some function with the name `call_me` without arguments or a return value.
+// functions1.rs
+// Make me compile! Execute `rustlings hint functions1` for hints :)
+
+fn call_me() {
+
+}
 
 fn main() {
-    call_me(); // Don't change this line
+    call_me();
 }

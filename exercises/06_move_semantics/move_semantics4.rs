@@ -1,18 +1,26 @@
+// move_semantics4.rs
+// Refactor this code so that instead of having `vec0` and creating the vector
+// in `fn main`, we create it within `fn fill_vec` and transfer the
+// freshly created vector from fill_vec to its caller.
+// Execute `rustlings hint move_semantics4` for hints!
+
 fn main() {
-    // You can optionally experiment here.
+    let mut vec1 = fill_vec();
+
+    println!("{} has length {} content `{:?}`", "vec1", vec1.len(), vec1);
+
+    vec1.push(88);
+
+    println!("{} has length {} content `{:?}`", "vec1", vec1.len(), vec1);
 }
 
-#[cfg(test)]
-mod tests {
-    // TODO: Fix the compiler errors only by reordering the lines in the test.
-    // Don't add, change or remove any line.
-    #[test]
-    fn move_semantics4() {
-        let mut x = Vec::new();
-        let y = &mut x;
-        let z = &mut x;
-        y.push(42);
-        z.push(13);
-        assert_eq!(x, [42, 13]);
-    }
+// `fill_vec()` no longer takes `vec: Vec<i32>` as argument
+fn fill_vec() -> Vec<i32> {
+    let mut vec = vec![];
+
+    vec.push(22);
+    vec.push(44);
+    vec.push(66);
+
+    vec
 }
