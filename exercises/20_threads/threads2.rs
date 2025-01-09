@@ -1,34 +1,50 @@
+// threads2.rs
+//
 // Building on the last exercise, we want all of the threads to complete their
-// work. But this time, the spawned threads need to be in charge of updating a
-// shared value: `JobStatus.jobs_done`
+// work but this time the spawned threads need to be in charge of updating a
+// shared value: JobStatus.jobs_completed
+// 在上一个练习的基础上，我们希望所有线程完成它们的工作，
+// 但这次生成的线程需要负责更新一个共享值：JobStatus.jobs_completed
+//
+// Execute `rustlings hint threads2` or use the `hint` watch subcommand for a
+// hint.
 
-use std::{sync::Arc, thread, time::Duration};
+// I AM DONE
 
+use std::sync::Arc;
+use std::thread;
+use std::time::Duration;
+use std::sync::Mutex;
+#[derive(Debug)]
 struct JobStatus {
-    jobs_done: u32,
+    jobs_completed: u32,
 }
 
 fn main() {
-    // TODO: `Arc` isn't enough if you want a **mutable** shared state.
-    let status = Arc::new(JobStatus { jobs_done: 0 });
-
-    let mut handles = Vec::new();
+    let status = Arc::new(Mutex::new(JobStatus { jobs_completed: 0 }));
+    let mut handles = vec![];
     for _ in 0..10 {
         let status_shared = Arc::clone(&status);
         let handle = thread::spawn(move || {
             thread::sleep(Duration::from_millis(250));
+            // TODO: You must take an action before you update a shared value
+           
+            let mut jobs_completed = status_shared.lock().unwrap();
+            jobs_completed.jobs_completed += 1;
 
-            // TODO: You must take an action before you update a shared value.
-            status_shared.jobs_done += 1;
         });
         handles.push(handle);
     }
+    // for handle in handles {
+    //     handle.join().unwrap();
+    //     // TODO: Print the value of the JobStatus.jobs_completed. Did you notice
+    //     // anything interesting in the output? Do you have to 'join' on all the
+    //     // handles?
 
-    // Waiting for all jobs to complete.
+    //     println!("jobs completed {}", ???);
+    // }
     for handle in handles {
-        handle.join().unwrap();
+        handle.join().unwrap();  // Ensure all threads complete before proceeding
     }
-
-    // TODO: Print the value of `JobStatus.jobs_done`.
-    println!("Jobs done: {}", todo!());
+    println!("jobs completed: {:?}", *status.lock().unwrap());
 }

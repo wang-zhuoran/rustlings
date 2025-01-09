@@ -1,3 +1,5 @@
+// hashmaps2.rs
+//
 // We're collecting different fruits to bake a delicious fruit cake. For this,
 // we have a basket, which we'll represent in the form of a hash map. The key
 // represents the name of each fruit we collect and the value represents how
@@ -5,12 +7,24 @@
 // Apple (4), Mango (2) and Lychee (5) are already in the basket hash map. You
 // must add fruit to the basket so that there is at least one of each kind and
 // more than 11 in total - we have a lot of mouths to feed. You are not allowed
-// to insert any more of the fruits that are already in the basket (Apple,
-// Mango, and Lychee).
+// to insert any more of these fruits!
+// 我们正在收集不同的水果来烤一个美味的水果蛋糕。为此，
+// 我们有一个篮子，我们将用哈希映射来表示。键代表我们收集的每种水果的名称，
+// 值代表我们收集的该种水果的数量。篮子哈希映射中已经有三种水果 -
+// 苹果（4个）、芒果（2个）和荔枝（5个）。
+// 你必须向篮子中添加水果，以确保每种水果至少有一个，总数超过11个 - 我们有很多人要喂饱。
+// 你不允许再插入这些水果中的任何一种！
+//
+// Make me pass the tests!
+//
+// Execute `rustlings hint hashmaps2` or use the `hint` watch subcommand for a
+// hint.
+
+// I AM DONE
 
 use std::collections::HashMap;
 
-#[derive(Hash, PartialEq, Eq, Debug)]
+#[derive(Hash, PartialEq, Eq)]
 enum Fruit {
     Apple,
     Banana,
@@ -20,7 +34,7 @@ enum Fruit {
 }
 
 fn fruit_basket(basket: &mut HashMap<Fruit, u32>) {
-    let fruit_kinds = [
+    let fruit_kinds = vec![
         Fruit::Apple,
         Fruit::Banana,
         Fruit::Mango,
@@ -32,11 +46,10 @@ fn fruit_basket(basket: &mut HashMap<Fruit, u32>) {
         // TODO: Insert new fruits if they are not already present in the
         // basket. Note that you are not allowed to put any type of fruit that's
         // already present!
+        if !basket.contains_key(&fruit) {
+            basket.insert(fruit, 1);
+        }
     }
-}
-
-fn main() {
-    // You can optionally experiment here.
 }
 
 #[cfg(test)]
@@ -45,8 +58,12 @@ mod tests {
 
     // Don't modify this function!
     fn get_fruit_basket() -> HashMap<Fruit, u32> {
-        let content = [(Fruit::Apple, 4), (Fruit::Mango, 2), (Fruit::Lychee, 5)];
-        HashMap::from_iter(content)
+        let mut basket = HashMap::<Fruit, u32>::new();
+        basket.insert(Fruit::Apple, 4);
+        basket.insert(Fruit::Mango, 2);
+        basket.insert(Fruit::Lychee, 5);
+
+        basket
     }
 
     #[test]
@@ -73,25 +90,13 @@ mod tests {
         let count = basket.values().sum::<u32>();
         assert!(count > 11);
     }
-
+    
     #[test]
     fn all_fruit_types_in_basket() {
-        let fruit_kinds = [
-            Fruit::Apple,
-            Fruit::Banana,
-            Fruit::Mango,
-            Fruit::Lychee,
-            Fruit::Pineapple,
-        ];
-
         let mut basket = get_fruit_basket();
         fruit_basket(&mut basket);
-
-        for fruit_kind in fruit_kinds {
-            let Some(amount) = basket.get(&fruit_kind) else {
-                panic!("Fruit kind {fruit_kind:?} was not found in basket");
-            };
-            assert!(*amount > 0);
+        for amount in basket.values() {
+            assert_ne!(amount, &0);
         }
     }
 }

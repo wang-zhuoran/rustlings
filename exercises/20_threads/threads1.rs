@@ -1,37 +1,44 @@
-// This program spawns multiple threads that each runs for at least 250ms, and
-// each thread returns how much time it took to complete. The program should
+// threads1.rs
+//
+// This program spawns multiple threads that each run for at least 250ms, and
+// each thread returns how much time they took to complete. The program should
 // wait until all the spawned threads have finished and should collect their
 // return values into a vector.
+//
+// 这个程序生成多个线程，每个线程运行至少 250 毫秒，
+// 每个线程返回它们完成所花费的时间。
+// 程序应等待所有生成的线程完成，并将它们的返回值收集到一个向量中。
+// Execute `rustlings hint threads1` or use the `hint` watch subcommand for a
+// hint.
 
-use std::{
-    thread,
-    time::{Duration, Instant},
-};
+// I AM DONE
+
+use std::thread;
+use std::time::{Duration, Instant};
 
 fn main() {
-    let mut handles = Vec::new();
+    let mut handles = vec![];
     for i in 0..10 {
-        let handle = thread::spawn(move || {
+        handles.push(thread::spawn(move || {
             let start = Instant::now();
             thread::sleep(Duration::from_millis(250));
-            println!("Thread {i} done");
+            println!("thread {} is complete", i);
             start.elapsed().as_millis()
-        });
-        handles.push(handle);
+        }));
     }
 
-    let mut results = Vec::new();
+    let mut results: Vec<u128> = vec![];
     for handle in handles {
-        // TODO: Collect the results of all threads into the `results` vector.
-        // Use the `JoinHandle` struct which is returned by `thread::spawn`.
+        // TODO: a struct is returned from thread::spawn, can you use it?
+        results.push(handle.join().unwrap());
     }
 
     if results.len() != 10 {
-        panic!("Oh no! Some thread isn't done yet!");
+        panic!("Oh no! All the spawned threads did not finish!");
     }
 
     println!();
     for (i, result) in results.into_iter().enumerate() {
-        println!("Thread {i} took {result}ms");
+        println!("thread {} took {}ms", i, result);
     }
 }
