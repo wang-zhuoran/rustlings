@@ -1,10 +1,11 @@
-fn main() {
-    // TODO: Change the line below to fix the compiler error.
-    let x;
+// variables2.rs
+// Make me compile! Execute the command `rustlings hint variables2` if you want a hint :)
 
+fn main() {
+    let x: u32 = 10;
     if x == 10 {
-        println!("x is ten!");
+        println!("Ten!");
     } else {
-        println!("x is not ten!");
+        println!("Not ten!");
     }
 }

@@ -1,8 +1,7 @@
-// TODO: Fix the compiler error.
-fn main() {
-    let x = 3;
-    println!("Number {x}");
+// variables4.rs
+// Make me compile! Execute the command `rustlings hint variables4` if you want a hint :)
 
-    x = 5; // Don't change this line
-    println!("Number {x}");
+fn main() {
+    let x: i32 = 1;
+    println!("Number {}", x);
 }
